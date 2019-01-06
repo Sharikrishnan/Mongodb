@@ -188,6 +188,7 @@ describe('PATCH /todos/:id',() => {
             expect(res.body.todo._id).toBe(id);
             expect(res.body.todo.text).toBe("False statement");
             expect(res.body.todo.completed).toBe(false);
+            expect(res.body.todo.completedAt).toBeFalsy();
         }).end(done);
     });
 });
