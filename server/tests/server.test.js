@@ -102,3 +102,41 @@ describe('GET /todos/:id',() => {
         }).end(done);
     });
 });
+
+describe('DELETE /todos/:id',() => {
+    it('Should get todo based on id passed as parameter', (done)=>{
+        var id = todos[0]._id.toHexString()
+        request(app)
+        .delete(`/todos/${id}`)
+        .expect(200)
+        .expect((res) => {
+            expect(res.body.todo._id).toBe(id);
+        }).end((err, res) => {
+            if (err) {
+                return done(err)
+            }
+            Todo.findById(id).then((todo) => {
+                expect(todo).toBeFalsy();
+                done();
+            }).catch((e) => done(e));
+        });
+    });
+
+    it('Should return 404 if the id is invald',(done) => {
+        request(app)
+        .delete('/todos/123')
+        .expect(404)
+        .expect((res) => {
+            expect(res.text).toBe('Not valid one');
+        }).end(done);
+    });
+
+    it('Should return 404 if record is not found',(done) => {
+        request(app)
+        .delete(`/todos/${new ObjectID().toHexString()}`)
+        .expect(404)
+        .expect((res) => {
+            expect(res.text).toBe('File not Found');
+        }).end(done);
+    });
+});
