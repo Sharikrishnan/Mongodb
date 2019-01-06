@@ -1,17 +1,20 @@
 const expect = require('expect');
 const request = require('supertest');
+const {ObjectID} = require('mongodb');
 
 const {app} = require('../server');
 const {Todo} = require('../models/todo');
 
 const todos = [{
+    _id : new ObjectID(),
     text : "First Todo test"
 },{
+    _id : new ObjectID(),
     text : "Second Todo test"
 }];
 
 beforeEach((done) => {
-    Todo.remove({}).then(() =>{
+    Todo.deleteMany({}).then(() =>{
         return Todo.insertMany(todos);
     }).then(() => done());
 });
@@ -60,13 +63,42 @@ describe('POST /todos',() => {
     });
 });
 
-describe('Get /todos', () => {
+describe('GET /todos', () => {
     it('Should get all the Todos', (done) => {
         request(app)
         .get('/todos')
         .expect(200)
         .expect((res) =>{
             expect(res.body.todos.length).toBe(2);
+        }).end(done);
+    });
+});
+
+describe('GET /todos/:id',() => {
+    it('Should get todo based on id passed as parameter', (done)=>{
+        request(app)
+        .get(`/todos/${todos[0]._id.toHexString()}`)
+        .expect(200)
+        .expect((res) => {
+            expect(res.body.todo.text).toBe(todos[0].text);
+        }).end(done);
+    });
+
+    it('Should return 404 if the id is invald',(done) => {
+        request(app)
+        .get('/todos/123')
+        .expect(404)
+        .expect((res) => {
+            expect(res.text).toBe('Not valid one');
+        }).end(done);
+    });
+
+    it('Should return 404 if record is not found',(done) => {
+        request(app)
+        .get(`/todos/${new ObjectID().toHexString()}`)
+        .expect(404)
+        .expect((res) => {
+            expect(res.text).toBe('File not Found');
         }).end(done);
     });
 });
