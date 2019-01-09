@@ -7,7 +7,7 @@ const { Todo } = require('./../../models/todo');
 
 
 module.exports.getAllTodos = async (req, res) => {
-    Todo.find().then(todos => res.send({ todos }), e => res.status(HttpStatus.BAD_REQUEST).send(e));
+    await Todo.find().then(todos => res.send({ todos }), e => res.status(HttpStatus.BAD_REQUEST).send(e));
 };
 
 module.exports.getTodo = async (req, res) => {
@@ -15,7 +15,7 @@ module.exports.getTodo = async (req, res) => {
     if (!ObjectID.isValid(id)) {
         return res.status(HttpStatus.NOT_FOUND).send('Not valid one');
     }
-    Todo.findById(id).then((todo) => {
+    await Todo.findById(id).then((todo) => {
         if (!todo) {
             return res.status(HttpStatus.NOT_FOUND).send('File not Found');
         }
@@ -28,7 +28,7 @@ module.exports.addTodo = async (req, res) => {
         text: req.body.text,
     });
 
-    todo.save().then(docs => res.send(docs), e => res.status(HttpStatus.BAD_REQUEST).send(e));
+    await todo.save().then(docs => res.send(docs), e => res.status(HttpStatus.BAD_REQUEST).send(e));
 };
 
 module.exports.deleteTodo = async (req, res) => {
@@ -36,7 +36,7 @@ module.exports.deleteTodo = async (req, res) => {
     if (!ObjectID.isValid(id)) {
         return res.status(HttpStatus.NOT_FOUND).send('Not valid one');
     }
-    Todo.findByIdAndDelete(id).then((todo) => {
+    await Todo.findOneAndDelete({_id : id}).then((todo) => {
         if (!todo) {
             return res.status(HttpStatus.NOT_FOUND).send('File not Found');
         }
@@ -61,7 +61,7 @@ module.exports.patchTodo = async (req, res) => {
         body.completedAt = null;
     }
 
-    Todo.findOneAndUpdate({ _id: id }, {
+    await Todo.findOneAndUpdate({ _id: id }, {
         $set: body,
     }, { new: true }).then((todo) => {
         if (!todo) {

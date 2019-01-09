@@ -1,6 +1,7 @@
 const expect = require('expect');
 const request = require('supertest');
 const { ObjectID } = require('mongodb');
+const HttpStatus = require('http-status-codes');
 
 const { app } = require('../app');
 const { Todo } = require('../models/todo');
@@ -26,7 +27,7 @@ describe('POST /todos', () => {
         request(app)
             .post('/todos')
             .send({ text })
-            .expect(200)
+            .expect(HttpStatus.OK)
             .expect((res) => {
                 expect(res.body.text).toBe(text);
             })
@@ -49,7 +50,7 @@ describe('POST /todos', () => {
         request(app)
             .post('/todos')
             .send({})
-            .expect(400)
+            .expect(HttpStatus.BAD_REQUEST)
             .end((err, res) => {
                 if (err) {
                     return done(err);
@@ -67,7 +68,7 @@ describe('GET /todos', () => {
     it('Should get all the Todos', (done) => {
         request(app)
             .get('/todos')
-            .expect(200)
+            .expect(HttpStatus.OK)
             .expect((res) => {
                 expect(res.body.todos.length).toBe(2);
             })
@@ -79,7 +80,7 @@ describe('GET /todos/:id', () => {
     it('Should get todo based on id passed as parameter', (done) => {
         request(app)
             .get(`/todos/${todos[0]._id.toHexString()}`)
-            .expect(200)
+            .expect(HttpStatus.OK)
             .expect((res) => {
                 expect(res.body.todo.text).toBe(todos[0].text);
             })
@@ -89,7 +90,7 @@ describe('GET /todos/:id', () => {
     it('Should return 404 if the id is invald', (done) => {
         request(app)
             .get('/todos/123')
-            .expect(404)
+            .expect(HttpStatus.NOT_FOUND)
             .expect((res) => {
                 expect(res.text).toBe('Not valid one');
             })
@@ -99,7 +100,7 @@ describe('GET /todos/:id', () => {
     it('Should return 404 if record is not found', (done) => {
         request(app)
             .get(`/todos/${new ObjectID().toHexString()}`)
-            .expect(404)
+            .expect(HttpStatus.NOT_FOUND)
             .expect((res) => {
                 expect(res.text).toBe('File not Found');
             })
@@ -112,7 +113,7 @@ describe('DELETE /todos/:id', () => {
         const id = todos[0]._id.toHexString();
         request(app)
             .delete(`/todos/${id}`)
-            .expect(200)
+            .expect(HttpStatus.OK)
             .expect((res) => {
                 expect(res.body.todo._id).toBe(id);
             })
@@ -130,7 +131,7 @@ describe('DELETE /todos/:id', () => {
     it('Should return 404 if the id is invald', (done) => {
         request(app)
             .delete('/todos/123')
-            .expect(404)
+            .expect(HttpStatus.NOT_FOUND)
             .expect((res) => {
                 expect(res.text).toBe('Not valid one');
             })
@@ -140,7 +141,7 @@ describe('DELETE /todos/:id', () => {
     it('Should return 404 if record is not found', (done) => {
         request(app)
             .delete(`/todos/${new ObjectID().toHexString()}`)
-            .expect(404)
+            .expect(HttpStatus.NOT_FOUND)
             .expect((res) => {
                 expect(res.text).toBe('File not Found');
             })
@@ -152,7 +153,7 @@ describe('PATCH /todos/:id', () => {
     it('Should return 404 if the id is invald', (done) => {
         request(app)
             .patch('/todos/123')
-            .expect(404)
+            .expect(HttpStatus.NOT_FOUND)
             .expect((res) => {
                 expect(res.text).toBe('Not valid one');
             })
@@ -162,7 +163,7 @@ describe('PATCH /todos/:id', () => {
     it('Should return 404 if record is not found', (done) => {
         request(app)
             .patch(`/todos/${new ObjectID().toHexString()}`)
-            .expect(404)
+            .expect(HttpStatus.NOT_FOUND)
             .end(done);
     });
 
@@ -174,7 +175,7 @@ describe('PATCH /todos/:id', () => {
                 text: 'test using test',
                 completed: true,
             })
-            .expect(200)
+            .expect(HttpStatus.OK)
             .expect((res) => {
                 expect(res.body.todo._id).toBe(id);
                 expect(res.body.todo.text).toBe('test using test');
@@ -190,7 +191,7 @@ describe('PATCH /todos/:id', () => {
             .send({
                 text: 'False statement',
             })
-            .expect(200)
+            .expect(HttpStatus.OK)
             .expect((res) => {
                 expect(res.body.todo._id).toBe(id);
                 expect(res.body.todo.text).toBe('False statement');
