@@ -7,7 +7,7 @@ const yaml = require('yamljs');
 
 const { apiRoutes } = require('./api/routes');
 
-const swaggerDocs = yaml.load('../swagger.yaml');
+const swaggerDocs = yaml.load('./swagger.yaml');
 
 const app = express();
 
