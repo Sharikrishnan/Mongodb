@@ -1,0 +1,147 @@
+swagger: "2.0"
+
+info:
+  version: 1.0.0
+  title: Todo App
+  description: An app to maintain our TodoList
+
+schemes:
+  - http
+host: localhost:3000
+basePath: /
+
+paths:
+  /todos:
+    get:
+      summary: Returns list of Todos
+      description: This API returns the list of all available Todos
+      responses:
+        200:
+          description: Todos List
+          schema:
+            type: array
+            items:
+              properties:
+                text:
+                  type: string
+                completed:
+                  type: boolean
+                completedAt:
+                  type: number
+        400:
+            description: Bad request for getting TodoList.
+        404:
+            description: No Todo available 
+    post:
+      summary: Add a new Todo
+      description: Add a new Todo along with exsisting Todos
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              text:
+                type: string           
+      responses:
+        200:
+          description: Returns Todo which got added
+          schema:
+            type: array
+            items:
+              properties:
+                text:
+                  type: string
+                completed:
+                  type: boolean
+                completedAt:
+                  type: number
+          400:
+            description: Bad request for adding a Todo.
+  /todos/{ID}:
+    get:
+      summary: Returns a Todo
+      description: This API returns a Todo based on the parameter passed
+      parameters:
+        - name: ID
+          in: path
+          required: true
+          description: ID of the Todo to be fetched
+          type: string
+      responses:
+        200:
+          description: Returns the Todo based on the parameter passed
+          schema:
+            type: object
+            items:
+              properties:
+                text:
+                  type: string
+                completed:
+                  type: boolean
+                completedAt:
+                  type: number
+        404:
+          description: Todo does not exists.
+    patch:
+      summary: Updates the Todo
+      description: Updates the details of the Book and returns the updated Book.
+      parameters:
+        - name: ID
+          in: path
+          required: true
+          description: The Todo's ID
+          type: string
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              text:
+                type: string
+              completed:
+                  type: boolean              
+
+      responses:
+        200:
+          description: A Book
+          schema:
+            type: array
+            items:
+              properties:
+                text:
+                  type: string
+                completed:
+                  type: boolean
+                completedAt:
+                  type: number
+        404:
+          description: The Todo does not exists for this ID.
+        400:
+          description: Bad request to update the existing Todo.
+    delete:
+      summary: Delete the Todo of the give ID
+      description: Deletes the Todo and returns the information of the deleted Todo.
+      parameters:
+        - name: ID
+          in: path
+          required: true
+          description: The Todo's ID
+          type: string
+      responses:
+        200:
+          description: A Book
+          schema:
+            type: array
+            items:
+              properties:
+                text:
+                  type: string
+                completed:
+                  type: boolean
+                completedAt:
+                  type: number
+        404:
+          description: The Todo does not exists for this ID.
+        400:
+          description: Bad request to delete the Todo.
