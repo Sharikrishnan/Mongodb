@@ -16,10 +16,20 @@ Todo App help you to capture day to day items which need to done
 - Nyc
 - Eslint
 
-## Getting Started
-
+# Getting Started
+## Prerequisites
+-NODE v8.9.4 or above
+-MONGODB
+-In command prompt, in folder you wish to keep the project, run git clone https://github.com/Sharikrishnan/Node_Todo_App
+## Installation
+### Install Node App
+ - Command prompt, run the ```npm install``` command C:\Users\Sharikrishnan\Documents\Node Projects\Node_Todo_App>npm install
+### Start Mongo DB
+- Command prompt, run ```mongod.exe --dbpath {folder path}```
+### Start Application
+- Command prompt, run ```npm run start```
 ## Run Test
-ATH033032:Node_Todo_App sharikrishnan$ npm run coverage
+```ATH033032:Node_Todo_App sharikrishnan$ npm run coverage
 
 > todo-api@1.0.0 coverage /Users/sharikrishnan/Documents/NodeProjects/Node_Todo_App
 > export NODE_ENV=test && nyc mocha --exit server/**/*.test.js --timeout 5000
@@ -70,6 +80,6 @@ All files            |    83.62 |       70 |       75 |    83.02 |              
   mongoose.js        |      100 |      100 |      100 |      100 |                   |
  server/models       |      100 |      100 |      100 |      100 |                   |
   todo.js            |      100 |      100 |      100 |      100 |                   |
----------------------|----------|----------|----------|----------|-------------------|
+---------------------|----------|----------|----------|----------|-------------------|```
 
 
