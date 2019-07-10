@@ -56,7 +56,6 @@ Started on port 3000
 
   PATCH /todos/:id
     ✓ Should return 404 if the id is invald
-(node:9814) DeprecationWarning: collection.findAndModify is deprecated. Use findOneAndUpdate, findOneAndReplace or findOneAndDelete instead.
     ✓ Should return 404 if record is not found
     ✓ Should update todo based on id passed as parameter
     ✓ Should clear completedAt when todo is not completed
